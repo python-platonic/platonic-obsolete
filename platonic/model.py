@@ -5,8 +5,6 @@ class Model(ABC):
     __backend__: type = None
 
     def __new__(cls, *args, **kwargs):
-        print('__new__')
-
         concrete_class = cls.__backend__
         abstract_class = cls
 
@@ -26,4 +24,4 @@ class Model(ABC):
         # noinspection PyTypeChecker
         proxy_class = type(class_name, bases, {})
 
-        return super(Model, cls).__new__(proxy_class, *args, **kwargs)
+        return concrete_class.__new__(proxy_class, *args, **kwargs)

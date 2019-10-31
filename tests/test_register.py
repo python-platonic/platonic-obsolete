@@ -1,3 +1,5 @@
+import pytest
+
 from platonic import register, Model
 
 
@@ -7,6 +9,10 @@ class Cat(Model):
 
 @register(Cat)
 class CatBackend:
+    pass
+
+
+class Dog(Model):
     pass
 
 
@@ -29,3 +35,8 @@ def test_backend():
 
 def test_isinstance():
     assert isinstance(Cat(), Cat)
+
+
+def test_no_backend():
+    with pytest.raises(TypeError):
+        Dog()

@@ -17,6 +17,7 @@ def test_dict_mapping():
     m = MyMapping()
 
     assert isinstance(m, MyDictMapping)
+    assert m.__class__.__name__ == 'MyMapping via MyDictMapping'
 
     m['a'] = 'b'
 
