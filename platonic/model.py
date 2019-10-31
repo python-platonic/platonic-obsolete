@@ -1,27 +1,35 @@
 from abc import ABC
 
 
-class Model(ABC):
-    __backend__: type = None
+def create_proxy_class(cls):
+    concrete_class = cls.__backend__
+    abstract_class = cls
 
-    def __new__(cls, *args, **kwargs):
-        concrete_class = cls.__backend__
-        abstract_class = cls
-
-        if concrete_class is None:
-            raise TypeError(
-                f'{abstract_class} does not have a backend defined. Please use '
-                f'platonic.register() decorator to assign one.'
-            )
-
-        bases = (
-            concrete_class,
-            abstract_class
+    if concrete_class is None:
+        raise TypeError(
+            f'{abstract_class} does not have a backend defined. Please use '
+            f'platonic.register() decorator to assign one.'
         )
 
-        class_name = f'{abstract_class.__name__} via {concrete_class.__name__}'
+    bases = (
+        concrete_class,
+        abstract_class
+    )
 
-        # noinspection PyTypeChecker
-        proxy_class = type(class_name, bases, {})
+    class_name = f'{abstract_class.__name__} via {concrete_class.__name__}'
 
-        return concrete_class.__new__(proxy_class, *args, **kwargs)
+    # noinspection PyTypeChecker
+    return type(class_name, bases, {})
+
+
+class Model(ABC):
+    __backend__: type = None
+    proxy_class: type = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls.proxy_class is None:
+            cls.proxy_class = create_proxy_class(cls)
+
+        concrete_class = cls.__backend__
+
+        return concrete_class.__new__(cls.proxy_class, *args, **kwargs)

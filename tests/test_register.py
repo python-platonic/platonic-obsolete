@@ -40,3 +40,7 @@ def test_isinstance():
 def test_no_backend():
     with pytest.raises(TypeError):
         Dog()
+
+
+def test_type_equality():
+    assert type(Cat()) == type(Cat())
