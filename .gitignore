@@ -1,3 +1,5 @@
 /.idea/
 /venv/
 
+/.pytest_cache/
+*.egg-info
