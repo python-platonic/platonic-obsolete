@@ -1,14 +1,22 @@
+from abc import ABC
+
 from platonic import register, Mapping
 from platonic.mapping import DictMapping
 
 
-@register(Mapping)
+class MyMapping(Mapping):
+    pass
+
+
+@register(MyMapping)
 class MyDictMapping(DictMapping):
     pass
 
 
 def test_dict_mapping():
-    m = MyDictMapping()
+    m = MyMapping()
+
+    assert isinstance(m, MyDictMapping)
 
     m['a'] = 'b'
 

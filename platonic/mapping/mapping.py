@@ -1,9 +1,8 @@
 import typing
-from abc import ABCMeta, ABC
+from abc import ABC
 
-KeyType = typing.TypeVar('KeyType')
-ValueType = typing.TypeVar('ValueType')
+from platonic import Model
 
 
-class Mapping(typing.Mapping[KeyType, ValueType], ABC):
+class Mapping(typing.Mapping, Model):
     pass

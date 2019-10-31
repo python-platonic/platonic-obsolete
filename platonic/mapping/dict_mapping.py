@@ -1,5 +1,2 @@
-from .mapping import Mapping
-
-
-class DictMapping(dict, Mapping):
+class DictMapping(dict):
     """Implementation of a Mapping based on a standard dict."""
