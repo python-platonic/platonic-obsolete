@@ -1,8 +1,7 @@
 import typing
-from abc import ABC
 
 from platonic import Model
 
 
-class Mapping(typing.Mapping, Model):
+class Mapping(typing.MutableMapping, Model):
     pass
