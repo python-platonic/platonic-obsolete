@@ -1,10 +1,10 @@
 from abc import ABC
 
-from platonic import register, Mapping
+from platonic import register, MutableMapping
 from platonic.mapping import DictMapping
 
 
-class MyMapping(Mapping):
+class MyMapping(MutableMapping):
     pass
 
 

@@ -1,4 +1,4 @@
 from .model import Model
 
-from .mapping import Mapping
+from .mutable_mapping import MutableMapping
 from .register import register

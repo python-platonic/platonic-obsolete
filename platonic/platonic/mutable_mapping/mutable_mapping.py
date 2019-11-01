@@ -3,5 +3,5 @@ import typing
 from platonic import Model
 
 
-class Mapping(typing.MutableMapping, Model):
+class MutableMapping(typing.MutableMapping, Model):
     pass

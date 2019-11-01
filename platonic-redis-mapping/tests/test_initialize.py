@@ -1,8 +1,8 @@
-from platonic import Mapping, register
+from platonic import MutableMapping, register
 from platonic_redis_mapping import RedisMapping
 
 
-class Cats(Mapping):
+class Cats(MutableMapping):
     pass
 
 
