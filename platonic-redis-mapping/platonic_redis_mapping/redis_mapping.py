@@ -1,9 +1,10 @@
-from typing import Mapping
+import typing
+
 from redis import Redis
 
 
-class RedisMapping(Mapping):
-    url = 'redis://localhost:6379/0'
+class RedisMapping(typing.MutableMapping):
+    url = 'localhost'
     name = 'test'
 
     _connection: Redis = None
@@ -33,3 +34,9 @@ class RedisMapping(Mapping):
 
     def __len__(self):
         return self.redis.hlen(self.name)
+
+    def __delitem__(self, key) -> None:
+        self.redis.hdel(self.name, key)
+
+    def __setitem__(self, k, v) -> None:
+        self.redis.hset(self.name, k, v)

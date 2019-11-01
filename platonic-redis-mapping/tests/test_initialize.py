@@ -21,4 +21,3 @@ def test_assign():
     cats['a'] = 'foo'
     assert cats['a'] == 'foo'
 
-
