@@ -30,4 +30,6 @@ class Model(ABC):
         if cls.proxy_class is None:
             cls.proxy_class = create_proxy_class(cls)
 
-        return ABC.__new__(cls.proxy_class, *args, **kwargs)
+        concrete_class = cls.__backend__
+
+        return concrete_class.__new__(cls.proxy_class, *args, **kwargs)

@@ -1,7 +1,7 @@
 from abc import ABC
 
 from platonic import register, MutableMapping
-from platonic.mapping import DictMapping
+from platonic.mutable_mapping import DictMapping
 
 
 class MyMapping(MutableMapping):

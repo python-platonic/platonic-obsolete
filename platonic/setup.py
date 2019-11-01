@@ -16,7 +16,7 @@ setuptools.setup(
     url='https://github.com/anatoly-scherbakov/platonic',
     packages=setuptools.find_packages(),
     install_requires=[
-
+        'typing_inspect'
     ],
     extras_require={
         'dev': [
