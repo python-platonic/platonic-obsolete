@@ -1,8 +1,10 @@
+from abc import ABC
+
 from platonic import MutableMapping, register
 from platonic_redis_mapping import RedisMapping
 
 
-class Cats(MutableMapping):
+class Cats(MutableMapping, ABC):
     pass
 
 
