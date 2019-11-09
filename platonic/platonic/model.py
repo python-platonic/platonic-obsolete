@@ -1,6 +1,9 @@
 from abc import ABC
 
 
+PROXY_CLASS_ATTRIBUTE = '__is_proxy_class'
+
+
 def create_proxy_class(cls):
     concrete_class = cls.__backend__
     abstract_class = cls
@@ -19,7 +22,9 @@ def create_proxy_class(cls):
     class_name = f'{abstract_class.__name__} via {concrete_class.__name__}'
 
     # noinspection PyTypeChecker
-    return type(class_name, bases, {})
+    return type(class_name, bases, {
+        PROXY_CLASS_ATTRIBUTE: True
+    })
 
 
 class Model(ABC):
@@ -27,6 +32,9 @@ class Model(ABC):
     proxy_class: type = None
 
     def __new__(cls, *args, **kwargs):
+        if getattr(cls, PROXY_CLASS_ATTRIBUTE, False):
+            return super().__new__(cls, *args, **kwargs)
+
         if cls.proxy_class is None:
             cls.proxy_class = create_proxy_class(cls)
 
