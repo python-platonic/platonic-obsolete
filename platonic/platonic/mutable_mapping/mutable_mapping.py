@@ -8,7 +8,7 @@ ValueType = typing.TypeVar('ValueType')
 
 
 class MutableMapping(
-    Mapping[KeyType, ValueType],
+    Mapping,
     typing.MutableMapping[KeyType, ValueType],
     ABC
 ):

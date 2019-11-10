@@ -9,11 +9,11 @@ ValueType = typing.TypeVar('ValueType')
 
 
 class Mapping(Model, typing.Mapping[KeyType, ValueType], ABC):
-    KeyType: typing.Type = None
-    ValueType: typing.Type = None
+    KeyType: typing.Type = typing.Any
+    ValueType: typing.Type = typing.Any
 
     @classmethod
-    def __validate_type_args__(cls, args):
+    def __validate_type_args__(cls, args) -> dict:
         if args is None:
             raise TypeError(f'Type args missing for {cls}.')
 
@@ -27,6 +27,9 @@ class Mapping(Model, typing.Mapping[KeyType, ValueType], ABC):
                 f'Exactly 2 type args expected for {cls}, {args} found instead.'
             )
 
-        cls.KeyType, cls.ValueType = args
+        key_type, value_type = args
 
-        return args
+        return {
+            'KeyType': key_type,
+            'ValueType': value_type
+        }

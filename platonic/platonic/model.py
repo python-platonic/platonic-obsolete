@@ -1,5 +1,5 @@
 from abc import ABC
-
+from typing import Generic
 
 PROXY_CLASS_ATTRIBUTE = '__is_proxy_class'
 
@@ -24,25 +24,31 @@ def create_proxy_class(cls):
     # noinspection PyTypeChecker
     return type(class_name, bases, {
         PROXY_CLASS_ATTRIBUTE: True,
-        '__type_args__': abstract_class.__validate_type_args__(
-            abstract_class.__type_args__
-        )
+        # FIXME this means type argument assignment only happens when an
+        #  instance is instantiated. That is not necessarily the best course
+        #  of action and an issue should probably be filed.
+        **abstract_class.__validate_type_args__(abstract_class.__type_args__)
     })
 
 
 class Model(ABC):
-    __backend__: type = None
     proxy_class: type = None
+    __backend__: type = None
     __type_args__ = None
 
     @classmethod
-    def __validate_type_args__(cls, args):
-        return args
+    def __validate_type_args__(cls, args) -> dict:
+        return {}
 
     # noinspection PyUnresolvedReferences
     def __class_getitem__(cls, params):
-        cls.__type_args__ = params
-        return super(Model, cls).__class_getitem__(params)
+        return type(
+            f'{cls.__name__}[{", ".join(param.__name__ for param in params)}]',
+            (cls, ),
+            {
+                '__type_args__': params,
+            }
+        )
 
     def __new__(cls, *args, **kwargs):
         if getattr(cls, PROXY_CLASS_ATTRIBUTE, False):

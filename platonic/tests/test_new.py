@@ -1,10 +1,15 @@
 import typing
-from abc import ABC
-
 import platonic
+import dataclasses
 
 
-class Cats(platonic.MutableMapping, ABC):
+@dataclasses.dataclass(frozen=True)
+class Cat:
+    color: str
+    age: int
+
+
+class Cats(platonic.MutableMapping[str, Cat]):
     pass
 
 
@@ -31,7 +36,7 @@ def test_initialize():
     assert isinstance(cats, Cats)
     assert isinstance(cats, CatsBackend)
     assert cats.__class__.__name__ == 'Cats via CatsBackend'
-    assert cats.__type_args__ is None
+    assert cats.__type_args__ == (str, Cat)
 
     cats2 = Cats()
     assert cats.__class__ == cats2.__class__
