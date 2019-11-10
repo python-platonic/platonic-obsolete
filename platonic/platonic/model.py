@@ -23,13 +23,24 @@ def create_proxy_class(cls):
 
     # noinspection PyTypeChecker
     return type(class_name, bases, {
-        PROXY_CLASS_ATTRIBUTE: True
+        PROXY_CLASS_ATTRIBUTE: True,
+        'args': abstract_class.validate_type_args(abstract_class.type_args)
     })
 
 
 class Model(ABC):
     __backend__: type = None
     proxy_class: type = None
+    type_args = None
+
+    @classmethod
+    def validate_type_args(cls, args):
+        return args
+
+    # noinspection PyUnresolvedReferences
+    def __class_getitem__(cls, params):
+        cls.type_args = params
+        return super(Model, cls).__class_getitem__(params)
 
     def __new__(cls, *args, **kwargs):
         if getattr(cls, PROXY_CLASS_ATTRIBUTE, False):

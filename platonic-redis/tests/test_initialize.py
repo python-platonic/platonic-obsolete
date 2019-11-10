@@ -19,7 +19,4 @@ def test_init():
 def test_assign():
     cats = Cats()
 
-    raise Exception(typing_inspect.get_args(Cats))
-
-    cats['a'] = 'foo'
-    assert cats['a'] == 'foo'
+    raise Exception(Cats.type_args)

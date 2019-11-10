@@ -8,7 +8,7 @@ ValueType = typing.TypeVar('ValueType')
 
 
 class MutableMapping(
-    typing.MutableMapping[KeyType, ValueType],
-    Model
+    Model,
+    typing.MutableMapping[KeyType, ValueType]
 ):
     pass
