@@ -42,6 +42,9 @@ class Model(ABC):
 
     # noinspection PyUnresolvedReferences
     def __class_getitem__(cls, params):
+        if not isinstance(params, tuple):
+            params = (params, )
+
         return type(
             f'{cls.__name__}[{", ".join(param.__name__ for param in params)}]',
             (cls, ),

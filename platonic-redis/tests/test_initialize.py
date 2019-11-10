@@ -13,10 +13,4 @@ class RedisCats(RedisMutableMapping):
 
 
 def test_init():
-    cats = Cats()
-
-
-def test_assign():
-    cats = Cats()
-
-    raise Exception(Cats.type_args)
+    Cats()

@@ -1,25 +1,11 @@
 import typing
 
 from redis import Redis
+from .base import RedisMixin
 
 
-class RedisMapping(typing.Mapping):
-    url = 'localhost'
+class RedisMapping(RedisMixin, typing.Mapping):
     name = 'test'
-
-    _connection: Redis = None
-
-    @property
-    def redis(self):
-        if self._connection is None:
-            self._connection = self.create_connection()
-
-        return self._connection
-
-    def create_connection(self):
-        return Redis(self.url)
-
-    # Implementing abstract methods
 
     def __getitem__(self, k):
         value = self.redis.hget(self.name, k)
