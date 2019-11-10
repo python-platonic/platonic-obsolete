@@ -1,14 +1,15 @@
 import typing
+from abc import ABC
 
-from platonic import Model
-
+from platonic.mapping import Mapping
 
 KeyType = typing.TypeVar('KeyType')
 ValueType = typing.TypeVar('ValueType')
 
 
 class MutableMapping(
-    Model,
-    typing.MutableMapping[KeyType, ValueType]
+    Mapping[KeyType, ValueType],
+    typing.MutableMapping[KeyType, ValueType],
+    ABC
 ):
     pass

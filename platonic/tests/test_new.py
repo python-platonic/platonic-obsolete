@@ -31,7 +31,7 @@ def test_initialize():
     assert isinstance(cats, Cats)
     assert isinstance(cats, CatsBackend)
     assert cats.__class__.__name__ == 'Cats via CatsBackend'
-    assert cats.type_args == ()
+    assert cats.__type_args__ is None
 
     cats2 = Cats()
     assert cats.__class__ == cats2.__class__

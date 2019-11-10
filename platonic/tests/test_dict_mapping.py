@@ -4,7 +4,7 @@ from platonic import register, MutableMapping
 from platonic.mutable_mapping import DictMapping
 
 
-class MyMapping(MutableMapping):
+class MyMapping(MutableMapping[str, str]):
     pass
 
 
