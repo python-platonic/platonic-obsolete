@@ -6,3 +6,5 @@ from .box import Box
 
 from .mapping import Mapping
 from .mutable_mapping import MutableMapping
+
+from .iterator import Iterator
