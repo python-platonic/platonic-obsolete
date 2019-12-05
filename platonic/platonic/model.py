@@ -1,5 +1,6 @@
 from abc import ABC
-from typing import Generic
+from typing_inspect import is_typevar
+
 
 PROXY_CLASS_ATTRIBUTE = '__is_proxy_class'
 
@@ -41,9 +42,12 @@ class Model(ABC):
         return {}
 
     # noinspection PyUnresolvedReferences
-    def __class_getitem__(cls, params):
+    def __class_getitem__disabled(cls, params):
         if not isinstance(params, tuple):
             params = (params, )
+
+        if all(map(is_typevar, params)):
+            pass
 
         return type(
             f'{cls.__name__}[{", ".join(param.__name__ for param in params)}]',
@@ -53,7 +57,7 @@ class Model(ABC):
             }
         )
 
-    def __new__(cls, *args, **kwargs):
+    def __new__disabled(cls, *args, **kwargs):
         if getattr(cls, PROXY_CLASS_ATTRIBUTE, False):
             return super().__new__(cls, *args, **kwargs)
 

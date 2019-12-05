@@ -20,7 +20,9 @@ setuptools.setup(
     ],
     extras_require={
         'dev': [
-            'pytest'
+            'pytest',
+            'boto3',
+            'boto3_type_annotations'
         ]
     },
     classifiers=[
