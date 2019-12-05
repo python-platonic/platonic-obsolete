@@ -2,9 +2,8 @@ import typing
 
 from platonic import Model
 
-
 ValueType = typing.TypeVar('ValueType')
 
 
-class Iterator(typing.Iterator[ValueType], Model):
+class Iterable(typing.Iterable[ValueType], Model):
     pass

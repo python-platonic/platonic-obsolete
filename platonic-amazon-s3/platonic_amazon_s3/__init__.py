@@ -1,1 +1,1 @@
-from .iterators import S3SortedKeysIterator
+from .iterators import S3RecursiveKeyStream

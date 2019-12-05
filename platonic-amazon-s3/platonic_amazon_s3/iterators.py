@@ -3,25 +3,27 @@ from urllib.parse import urlparse
 import boto3
 from boto3_type_annotations import s3
 from botocore.paginate import PageIterator
-from typing import Iterator, TypeVar
+from typing import Iterator, Optional
 
 from platonic_sorted.sorted import Sorted
-
-T = TypeVar('T')
-
-
-def identity(value: T) -> T:
-    return value
+from platonic import Iterable
 
 
-def always(value: T) -> bool:
-    return True
+def is_not_a_directory(url: str):
+    return not url.endswith('/')
 
 
-class S3SortedKeysIterator(Sorted, Iterator[str]):
-    url: str
+class S3RecursiveKeyStream(Sorted, Iterable[str]):
+    url: Optional[str] = None
 
-    def recurse(self) -> Iterator[str]:
+    def __init__(self, url: Optional[str] = None):
+        if url is not None:
+            self.url = url
+
+        if self.url is None:
+            raise ValueError(f'{self} does not have `url` defined.')
+
+    def _recurse(self) -> Iterator[str]:
         """Stream of all file URLs on Data Lake S3 bucket."""
 
         client: s3.Client = boto3.client('s3')
@@ -44,4 +46,4 @@ class S3SortedKeysIterator(Sorted, Iterator[str]):
                 yield f's3://{bucket_name}/{key}'
 
     def __iter__(self):
-        return self.recurse()
+        return self._recurse()
