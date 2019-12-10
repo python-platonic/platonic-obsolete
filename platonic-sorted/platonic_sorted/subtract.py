@@ -1,5 +1,8 @@
+import itertools
 import logging
-from typing import Iterator, Optional
+from collections import namedtuple
+from dataclasses import dataclass
+from typing import Iterator, Optional, Any
 
 from .base import T, U, KeyFunction
 
@@ -13,11 +16,27 @@ class Exhausted:
 EXHAUSTED = Exhausted()
 
 
-def next_or(iterator: Iterator, value: Exhausted = EXHAUSTED):
-    try:
-        return next(iterator)
-    except StopIteration:
-        return value
+@dataclass(frozen=True)
+class Caret:
+    value: T
+    key: Any
+
+
+def caret(iterator: Iterator[T], key: Optional[KeyFunction]) -> Iterator[Caret]:
+    """
+    Apply key function to every item in the iterator. After it is complete,
+    yield infinite number of EXHAUSTED values.
+    """
+    if key is None:
+        for value in iterator:
+            yield Caret(value, value)
+
+    else:
+        for value in iterator:
+            yield Caret(value, key(value))
+
+    for _ in itertools.count():
+        yield EXHAUSTED
 
 
 def subtract_sorted_iterators(
@@ -29,25 +48,39 @@ def subtract_sorted_iterators(
     """Return only those items from `universe` which are not present
     in `subtracted`."""
 
-    last_subtracted_element = next_or(subtracted)
+    universe_caret = caret(universe, universe_key)
+    subtracted_caret = caret(subtracted, subtracted_key)
 
-    for universe_element in universe:
+    second = next(subtracted_caret)
+
+    for first in universe_caret:
+        if first == EXHAUSTED:
+            return
+
+        # If the second iterator's current value is greater than current first
+        # iterator value, we slide along the first iterator.
         if (
-            last_subtracted_element == EXHAUSTED
-            or universe_element < last_subtracted_element
+            second == EXHAUSTED
+            or first.key < second.key
         ):
-            yield universe_element
+            yield first.value
+            continue
+
+        # If second iterator's current value is greater that that of first
+        # iterator, we slide along the second iterator.
+        while (
+                second != EXHAUSTED
+                and first.key > second.key
+        ):
+            second = next(subtracted_caret)
+
+        # Current values of the two iterators are equal. By definition of
+        # subtraction, we do not yield first.value, - we do nothing.
+        if (
+            second != EXHAUSTED
+            and first.key == second.key
+        ):
+            pass
 
         else:
-            while (
-                    last_subtracted_element != EXHAUSTED
-                    and universe_element > last_subtracted_element
-            ):
-                last_subtracted_element = next_or(subtracted)
-
-            if universe_element == last_subtracted_element:
-                logger.info('Skipped: %s', universe_element)
-                last_subtracted_element = next_or(subtracted)
-
-            else:
-                yield universe_element
+            yield first.value

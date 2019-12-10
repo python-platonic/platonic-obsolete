@@ -5,11 +5,11 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="platonic-sorted",
-    version="0.0.1",
+    version="0.0.2",
     author="Anatoly Scherbakov",
     author_email="altaisoft@gmail.com",
     description=(
-        "Sorted containers mixins and algorithms"
+        "Sorted containers mix-ins and algorithms"
     ),
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -21,6 +21,7 @@ setuptools.setup(
     extras_require={
         'dev': [
             'pytest',
+            'coverage'
         ]
     },
     classifiers=[

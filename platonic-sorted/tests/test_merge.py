@@ -29,9 +29,9 @@ def test_direction_mismatch():
 
 
 def test_key_function_mismatch():
-    # with pytest.raises(KeyFunctionMismatchError):
-    # noinspection PyTypeChecker
-    merge(
-        Sorted([1, 2, 3]),
-        Sorted(['c', 'bb', 'aaa'], key=len)
-    )
+    with pytest.raises(KeyFunctionMismatchError):
+        # noinspection PyTypeChecker
+        merge(
+            Sorted([1, 2, 3]),
+            Sorted(['c', 'bb', 'aaa'], key=len)
+        )

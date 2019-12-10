@@ -4,7 +4,8 @@ import operator
 
 from typing import Iterable, Optional
 
-from platonic_sorted.base import KeyFunction, T
+from platonic_sorted.base import KeyFunction, T, U
+from platonic_sorted.subtract import subtract_sorted_iterators
 from platonic_sorted.unique import deduplicate_sorted_iterable
 
 
@@ -55,16 +56,18 @@ class Sorted(Iterable[T]):
     def __add__(self, other: 'Sorted[T]') -> 'Sorted[T]':
         return merge(self, other)
 
-    def __sub__(self, other: 'Sorted[T]') -> 'Sorted[T]':
+    def __sub__(self, other: 'Sorted[U]') -> 'Sorted[T]':
         if self.reverse != other.reverse:
             raise DirectionMismatchError(self, other)
 
-        if self.key != other.key:
-            raise DirectionMismatchError(self, other)
+        assert not self.reverse, 'Reversed iterators are not supported yet'
 
-        iterable = subtract(
-            self.iterable, other.iterable,
-            key=self.key, reverse=self.reverse
+        iterable = subtract_sorted_iterators(
+            universe=iter(self.iterable),
+            subtracted=iter(other.iterable),
+
+            universe_key=self.key,
+            subtracted_key=self.key
         )
 
         return Sorted(
