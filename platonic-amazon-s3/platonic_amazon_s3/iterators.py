@@ -5,7 +5,7 @@ from boto3_type_annotations import s3
 from botocore.paginate import PageIterator
 from typing import Iterator, Optional
 
-from platonic_sorted.sorted import Sorted
+from sorted.sorted import Sorted
 from platonic import Iterable
 
 
