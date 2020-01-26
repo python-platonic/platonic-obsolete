@@ -1,7 +1,7 @@
 import typing
 from abc import ABC
 
-from platonic import Model
+from ..model import Model
 
 
 KeyType = typing.TypeVar('KeyType')
@@ -9,13 +9,14 @@ ValueType = typing.TypeVar('ValueType')
 
 
 class Mapping(Model, typing.Mapping[KeyType, ValueType], ABC):
-    KeyType: typing.Type = typing.Any
-    ValueType: typing.Type = typing.Any
+    KeyType: type
+    ValueType: type
 
-    def __class_getitem__(cls, args: tuple) -> type:
+    def __class_getitem__(cls, args: typing.Tuple[type, type]) -> type:
         if (
-            args is None
-            or not isinstance(args, tuple)
+            # We have to check the types of arguments here to ensure
+            # the structure is used properly. mypy does not condone that.
+            not isinstance(args, tuple)   # type: ignore
             or len(args) != 2
         ):
             raise TypeError(
